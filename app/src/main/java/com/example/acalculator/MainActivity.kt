@@ -20,6 +20,10 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "O metodo onCreate foi invocado")
         setContentView(R.layout.activity_main)
         NavigationManager.goToCalculatorFragment(supportFragmentManager)
+
+        val historic = intent?.getParcelableArrayListExtra<Operation>(EXTRA_HISTORIC)?.toMutableList()?:mutableListOf()
+        list_historic?.layoutManager = LinearLayoutManager(this)
+        list_historic?.adapter = HistoricAdapter(this, R.layout.item_expression, historic)
     }
 
     override fun onDestroy() {

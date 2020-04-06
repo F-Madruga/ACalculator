@@ -10,13 +10,9 @@ import kotlinx.android.synthetic.main.fragment_historic.*
 
 class HistoricActivity : AppCompatActivity() {
 
-    private val TAG = HistoricActivity::class.java.simpleName
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historic)
         NavigationManager.goToHistoricFragment(supportFragmentManager)
-        Log.i(TAG,this.supportFragmentManager.toString())
-        Log.i(TAG, "OnCreate")
     }
 }

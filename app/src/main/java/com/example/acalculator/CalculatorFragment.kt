@@ -17,7 +17,9 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Optional
 import kotlinx.android.synthetic.main.fragment_calculator.list_historic
+import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import net.objecthunter.exp4j.ExpressionBuilder
+import kotlin.collections.ArrayList
 
 const val EXTRA_HISTORIC = "com.example.acalculator.HISTORIC"
 const val VISOR_KEY = "visor"
@@ -30,7 +32,21 @@ class CalculatorFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_calculator, container, false)
         ButterKnife.bind(this, view)
+        historic.clear()
+        historic.addAll(activity?.intent?.getParcelableArrayListExtra<Operation>(EXTRA_HISTORIC)?.toMutableList()?:mutableListOf())
+        view.list_historic?.layoutManager = LinearLayoutManager(activity as Context)
+        view.list_historic?.adapter = HistoricAdapter(activity as Context, R.layout.item_expression, historic)
+
+        view.last_expression?.text = if (historic.isEmpty()) "" else historic.last().result.toString()
         return view
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.run {
+            activity?.intent?.putParcelableArrayListExtra(EXTRA_HISTORIC, ArrayList(historic))
+        }
+        super.onSaveInstanceState(outState)
     }
 
     @Optional
