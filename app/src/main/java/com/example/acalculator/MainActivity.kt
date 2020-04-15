@@ -11,6 +11,9 @@ import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.drawer_header.*
+import kotlinx.android.synthetic.main.drawer_header.view.*
+import kotlinx.android.synthetic.main.drawer_header.view.drawer_title
 import kotlinx.android.synthetic.main.fragment_calculator.*
 
 
@@ -51,6 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toogle = ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close)
         nav_drawer.setNavigationItemSelectedListener(this)
         drawer.addDrawerListener(toogle)
+        nav_drawer.getHeaderView(0).drawer_title.text = intent?.getStringExtra(EXTRA_USERNAME)?:""
+        nav_drawer.getHeaderView(0).drawer_description.text = intent?.getStringExtra(EXTRA_EMAIL)?:""
         toogle.syncState()
     }
 
@@ -60,6 +65,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 NavigationManager.goToCalculatorFragment(supportFragmentManager)
             }
             R.id.nav_historic -> NavigationManager.goToHistoricFragment(supportFragmentManager)
+            R.id.nav_logout -> {NavigationManager.goToLoginFragment(supportFragmentManager)}
         }
         drawer.closeDrawer(GravityCompat.START)
         return true

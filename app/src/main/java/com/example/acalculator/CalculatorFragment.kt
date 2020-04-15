@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_calculator.*
 import java.text.SimpleDateFormat
 import java.util.*
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -28,9 +29,12 @@ class CalculatorFragment : Fragment() {
 
     private val TAG = CalculatorFragment::class.java.simpleName
     private val historic:MutableList<Operation> = mutableListOf()
+    private lateinit var viewModel: CalculatorViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_calculator, container, false)
+        viewModel = ViewModelProviders.of(this).get(CalculatorViewModel::class.java)
+        viewModel.display.let { view.text_visor.text = it }
         ButterKnife.bind(this, view)
         historic.clear()
         historic.addAll(activity?.intent?.getParcelableArrayListExtra<Operation>(EXTRA_HISTORIC)?.toMutableList()?:mutableListOf())
@@ -107,7 +111,9 @@ class CalculatorFragment : Fragment() {
     @OnClick(R.id.button_historic)
     fun onClickHistoric(view: View) {
         val intent = Intent(context, HistoricActivity::class.java)
-        intent.apply { putParcelableArrayListExtra(EXTRA_HISTORIC, ArrayList(historic)) }
+        intent.apply {
+            putParcelableArrayListExtra(EXTRA_HISTORIC, ArrayList(historic))
+        }
         startActivity(intent)
         //finish()
     }
