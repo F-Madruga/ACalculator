@@ -1,5 +1,8 @@
 package com.example.acalculator
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 class ListStorage private constructor() {
 
     private val storage = mutableListOf<Operation>()
@@ -18,8 +21,11 @@ class ListStorage private constructor() {
         }
     }
 
-    fun insert(operation: Operation) {
-        storage.add(operation)
+    suspend fun insert(operation: Operation) {
+        withContext(Dispatchers.IO) {
+            Thread.sleep(30000)
+            storage.add(operation)
+        }
     }
 
     fun getAll(): List<Operation> {

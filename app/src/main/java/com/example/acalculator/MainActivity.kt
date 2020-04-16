@@ -28,9 +28,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         NavigationManager.goToCalculatorFragment(supportFragmentManager)
         setupDrawerMenu()
-        val historic = intent?.getParcelableArrayListExtra<Operation>(EXTRA_HISTORIC)?.toMutableList()?:mutableListOf()
+        /*val historic = intent?.getParcelableArrayListExtra<Operation>(EXTRA_HISTORIC)?.toMutableList()?:mutableListOf()
         list_historic?.layoutManager = LinearLayoutManager(this)
-        list_historic?.adapter = HistoricAdapter(this, R.layout.item_expression, historic)
+        list_historic?.adapter = HistoricAdapter(this, R.layout.item_expression, historic)*/
     }
 
     override fun onDestroy() {
@@ -69,16 +69,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        text_visor.text = savedInstanceState?.getString(VISOR_KEY)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.run {
-            putString(VISOR_KEY, text_visor?.text.toString())
-        }
-        super.onSaveInstanceState(outState)
     }
 }

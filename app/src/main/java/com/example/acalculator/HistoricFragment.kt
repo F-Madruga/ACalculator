@@ -22,20 +22,20 @@ class HistoricFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_historic, container, false)
         ButterKnife.bind(this, view)
 
-        historic.clear()
+        /*historic.clear()
         historic.addAll(activity?.intent?.getParcelableArrayListExtra<Operation>(EXTRA_HISTORIC)?.toMutableList()?: mutableListOf())
         view.list_historic.layoutManager = LinearLayoutManager(activity as Context)
-        view.list_historic.adapter = HistoricAdapter(activity as Context, R.layout.item_expression, historic)
+        view.list_historic.adapter = HistoricAdapter(activity as Context, R.layout.item_expression, historic)*/
 
         return view
     }
 
 
 
-    @OnClick(R.id.button_back)
+    /*@OnClick(R.id.button_back)
     fun onClickBack(view: View) {
         val intent = Intent(activity as Context, MainActivity::class.java)
         intent.apply { putParcelableArrayListExtra(EXTRA_HISTORIC, ArrayList(historic)) }
         startActivity(intent)
-    }
+    }*/
 }

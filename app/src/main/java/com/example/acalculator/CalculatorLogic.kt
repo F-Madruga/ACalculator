@@ -1,5 +1,8 @@
 package com.example.acalculator
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.objecthunter.exp4j.ExpressionBuilder
 
 class CalculatorLogic {
@@ -13,7 +16,13 @@ class CalculatorLogic {
     fun performOperation(expression: String) : Double {
         val expressionBuilder = ExpressionBuilder(expression).build()
         val result = expressionBuilder.evaluate()
-        storage.insert(Operation(expression, result))
+        CoroutineScope(Dispatchers.IO).launch {
+            storage.insert(Operation(expression, result))
+        }
         return result
+    }
+
+    fun getAll() : List<Operation> {
+        return storage.getAll()
     }
 }
