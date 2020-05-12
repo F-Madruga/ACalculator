@@ -6,14 +6,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.objecthunter.exp4j.ExpressionBuilder
 import pt.ulusofona.cm.data.local.entities.Operation
-import pt.ulusofona.cm.data.local.list.ListStorage
+import pt.ulusofona.cm.data.local.room.dao.OperationDao
 import pt.ulusofona.cm.ui.listeners.OnHistoryChanged
 
-class CalculatorLogic {
+class CalculatorLogic(private val storage: OperationDao) {
 
     private val TAG = CalculatorLogic::class.java.simpleName
-
-    private val storage = ListStorage.getIntance()
 
     fun insertSymbol(display: String, symbol: String) : String {
         Log.i(TAG, "InsertSymbol")

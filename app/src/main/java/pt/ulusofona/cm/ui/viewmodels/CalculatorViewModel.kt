@@ -1,23 +1,27 @@
 package pt.ulusofona.cm.ui.viewmodels
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pt.ulusofona.cm.data.local.entities.Operation
+import pt.ulusofona.cm.data.local.room.CalculatorDatabase
 import pt.ulusofona.cm.domain.calculator.CalculatorLogic
 import pt.ulusofona.cm.ui.listeners.OnDisplayChanged
 import pt.ulusofona.cm.ui.listeners.OnHistoryChanged
 
-class CalculatorViewModel : ViewModel(), OnHistoryChanged {
+class CalculatorViewModel(application: Application) : AndroidViewModel(application), OnHistoryChanged {
 
     private val TAG = CalculatorViewModel::class.java.simpleName
 
     private var displayListener: OnDisplayChanged? = null
     private var historyListener: OnHistoryChanged? = null
 
-    private val calculatorLogic = CalculatorLogic()
+    private val storage = CalculatorDatabase.getInstance(application).operationDao()
+    private val calculatorLogic = CalculatorLogic(storage)
 
     var display: String = ""
     var history: List<Operation> = listOf()
