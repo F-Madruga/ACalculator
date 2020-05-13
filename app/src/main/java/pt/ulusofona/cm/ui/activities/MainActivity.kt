@@ -1,5 +1,6 @@
 package pt.ulusofona.cm.ui.activities
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
 import pt.ulusofona.cm.R
+import pt.ulusofona.cm.ui.fragments.PREFERENCES_FILE
 import pt.ulusofona.cm.ui.utils.NavigationManager
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId) {
             R.id.nav_calculator -> NavigationManager.goToCalculatorFragment(supportFragmentManager)
             R.id.nav_history -> NavigationManager.goToHistoryFragment(supportFragmentManager)
+            R.id.nav_settings -> NavigationManager.goToSettingsFragment(supportFragmentManager)
         }
         drawer.closeDrawer(GravityCompat.START)
         return true

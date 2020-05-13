@@ -7,41 +7,38 @@ import kotlinx.coroutines.launch
 import net.objecthunter.exp4j.ExpressionBuilder
 import pt.ulusofona.cm.data.local.entities.Operation
 import pt.ulusofona.cm.data.local.room.dao.OperationDao
+import pt.ulusofona.cm.ui.listeners.OnDisplayChanged
 import pt.ulusofona.cm.ui.listeners.OnHistoryChanged
+import retrofit2.Retrofit
 
-class CalculatorLogic(private val storage: OperationDao) {
+class CalculatorLogic(private val storage: OperationDao, private val retrofit: Retrofit) {
 
     private val TAG = CalculatorLogic::class.java.simpleName
 
-    fun insertSymbol(display: String, symbol: String) : String {
+    fun insertSymbol(display: String, symbol: String, listener: OnDisplayChanged) {
         Log.i(TAG, "InsertSymbol")
-        return if (display.isEmpty()) symbol else display + symbol
+        listener.onDisplayChanged(if (display.isEmpty()) symbol else display + symbol)
     }
 
-    fun getAll(listener: OnHistoryChanged) {
-        CoroutineScope(Dispatchers.IO).launch {
-            listener.onHistoryChanged(storage.getAll())
-        }
-    }
-
-    fun clear(display: String) : String {
+    fun clear(display: String, listener: OnDisplayChanged) {
         Log.i(TAG, "Clear")
-        return "0"
+        listener.onDisplayChanged("0")
     }
 
-    fun deleteSymbol(display: String) : String {
+    fun deleteSymbol(display: String, listener: OnDisplayChanged) {
         Log.i(TAG, "DeleteSymbol")
-        return if(display.length == 1) "0" else display.dropLast(1)
+        listener.onDisplayChanged(if(display.length == 1) "0" else display.dropLast(1))
     }
 
-    fun performOperation(expression: String, listener: OnHistoryChanged) : Double {
+    fun performOperation(expression: String, listener: OnDisplayChanged) {
         Log.i(TAG, "PerformOperation")
         val expressionBuilder = ExpressionBuilder(expression).build()
         val result = expressionBuilder.evaluate()
         CoroutineScope(Dispatchers.IO).launch {
             storage.insert(Operation(expression, result))
-            listener.onHistoryChanged(storage.getAll())
+            Log.i(TAG, "Done inserting")
+            listener.onAddOperation()
         }
-        return result
+        listener.onDisplayChanged(result.toString())
     }
 }

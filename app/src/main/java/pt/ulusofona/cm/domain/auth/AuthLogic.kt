@@ -15,34 +15,32 @@ class AuthLogic(private val retrofit: Retrofit) {
 
     private val TAG = AuthLogic::class.java.simpleName
 
-    suspend fun authenticateUser(email: String, password: String, listener: OnAuthenticated) {
+    fun authenticateUser(email: String, password: String, listener: OnAuthenticated) {
         Log.i(TAG, "AuthenticateUser")
         val service = retrofit.create(AuthService::class.java)
-        val response = service.login(Login(email, password))
         CoroutineScope(Dispatchers.IO).launch {
-            if (response.isSuccessful) {
-                response.body()
-                Log.i(TAG, "Resposta = ${response.body().toString()}")
+            val response = service.login(Login(email, password))
+            if (response.isSuccessful && response.body() != null) {
+                response.body()?.let {
+                    listener.onAuthenticateSuccess(it.email, it.token)
+                }
             }
             else {
-                Log.i(TAG, "Erro = ${response.body().toString()}")
+                listener.onAuthenticateFailure()
             }
         }
     }
 
-    suspend fun registerUser(name: String, email: String, password: String, listener: OnRegistered) {
+    fun registerUser(name: String, email: String, password: String, listener: OnRegistered) {
         Log.i(TAG, "AuthenticateUser")
         val service = retrofit.create(AuthService::class.java)
-        val response = service.register(Register(name, email, password))
         CoroutineScope(Dispatchers.IO).launch {
-            if (response.isSuccessful) {
-                response.body()
-                Log.i(TAG, "Resposta = ${response.body().toString()}")
-                listener.onRegistered(true)
+            val response = service.register(Register(name, email, password))
+            if (response.isSuccessful && response.body() != null) {
+                listener.onRegisteredSuccess()
             }
             else {
-                Log.i(TAG, "Erro = ${response.body().toString()}")
-                listener.onRegistered(false)
+                listener.onRegisteredFailure()
             }
         }
     }

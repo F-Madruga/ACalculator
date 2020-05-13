@@ -16,30 +16,31 @@ import pt.ulusofona.cm.data.local.entities.Operation
 import pt.ulusofona.cm.ui.adapters.HistoryAdapter
 import pt.ulusofona.cm.ui.listeners.OnHistoryChanged
 import pt.ulusofona.cm.ui.viewmodels.CalculatorViewModel
+import pt.ulusofona.cm.ui.viewmodels.HistoryViewModel
 
 class HistoryFragment : Fragment(), OnHistoryChanged {
 
     private val TAG = HistoryFragment::class.java.simpleName
 
-    private lateinit var calculatorViewModel: CalculatorViewModel
+    private lateinit var historyViewModel: HistoryViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.i(TAG, "OnCreateView")
         val view = inflater.inflate(R.layout.fragment_history, container, false)
         ButterKnife.bind(this, view)
-        calculatorViewModel = ViewModelProviders.of(this).get(CalculatorViewModel::class.java)
+        historyViewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
         return view
     }
 
     override fun onStart() {
         Log.i(TAG, "OnStart")
-        calculatorViewModel.registerHistoryListener(this)
+        historyViewModel.registerListener(this)
         super.onStart()
     }
 
     override fun onDestroy() {
         Log.i(TAG, "OnDestroy")
-        calculatorViewModel.unregisterListener()
+        historyViewModel.unregisterListener()
         super.onDestroy()
     }
 

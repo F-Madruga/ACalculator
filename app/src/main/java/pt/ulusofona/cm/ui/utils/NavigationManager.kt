@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import pt.ulusofona.cm.R
-import pt.ulusofona.cm.ui.fragments.CalculatorFragment
-import pt.ulusofona.cm.ui.fragments.HistoryFragment
-import pt.ulusofona.cm.ui.fragments.LoginFragment
-import pt.ulusofona.cm.ui.fragments.RegisterFragment
+import pt.ulusofona.cm.ui.fragments.*
 
 abstract class NavigationManager {
     companion object {
@@ -40,6 +37,11 @@ abstract class NavigationManager {
         fun goToRegisterFragment(fm: FragmentManager) {
             Log.i(TAG, "GoToRegisterFragment")
             placeFragment(fm, RegisterFragment())
+        }
+
+        fun goToSettingsFragment(fm: FragmentManager) {
+            Log.i(TAG, "GoToSettings")
+            placeFragment(fm, SettingsFragment())
         }
     }
 }

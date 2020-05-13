@@ -52,14 +52,13 @@ class RegisterFragment : Fragment(), OnRegistered {
         }
     }
 
-    override fun onRegistered(success: Boolean) {
-        if (success) {
-            activity?.supportFragmentManager?.let { NavigationManager.goToLoginFragment(it) }
-        }
-        else {
-            edit_username.setError("Erro")
-            edit_email.setError("Erro")
-            edit_password.setError("Erro")
-        }
+    override fun onRegisteredFailure() {
+        edit_username.setError("Erro")
+        edit_email.setError("Erro")
+        edit_password.setError("Erro")
+    }
+
+    override fun onRegisteredSuccess() {
+        activity?.supportFragmentManager?.let { NavigationManager.goToLoginFragment(it) }
     }
 }

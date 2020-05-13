@@ -19,14 +19,18 @@ class LoginViewModel: ViewModel(), OnAuthenticated {
     var token: String = ""
 
     fun onLogin(email: String, password: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            authLogic.authenticateUser(email, password, this@LoginViewModel)
+        authLogic.authenticateUser(email, password, this)
+    }
+
+    private fun notifyAuthenticationFailure() {
+        CoroutineScope(Dispatchers.Main).launch {
+            listener?.onAuthenticateFailure()
         }
     }
 
-    private fun notifyAuthenticated() {
+    private fun notifyAuthenticationSuccess() {
         CoroutineScope(Dispatchers.Main).launch {
-            listener?.onAuthenticated(email, token)
+            listener?.onAuthenticateSuccess(this@LoginViewModel.email, this@LoginViewModel.token)
         }
     }
 
@@ -38,9 +42,13 @@ class LoginViewModel: ViewModel(), OnAuthenticated {
         listener = null
     }
 
-    override fun onAuthenticated(email: String, token: String) {
+    override fun onAuthenticateSuccess(email: String, token: String) {
         this.email = email
         this.token = token
-        notifyAuthenticated()
+        notifyAuthenticationSuccess()
+    }
+
+    override fun onAuthenticateFailure() {
+        notifyAuthenticationFailure()
     }
 }

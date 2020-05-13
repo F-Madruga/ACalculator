@@ -15,14 +15,18 @@ class RegisterViewModel: ViewModel(), OnRegistered {
     var success: Boolean = false
 
     fun onClickSubmitRegister(name: String, email: String, password: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            authLogic.registerUser(name, email, password, this@RegisterViewModel)
+        authLogic.registerUser(name, email, password, this)
+    }
+
+    private fun notifyRegisterSuccess() {
+        CoroutineScope(Dispatchers.Main).launch {
+            listener?.onRegisteredSuccess()
         }
     }
 
-    private fun notifyRegistered() {
+    private fun notifyRegisterFailure() {
         CoroutineScope(Dispatchers.Main).launch {
-            listener?.onRegistered(success)
+            listener?.onRegisteredFailure()
         }
     }
 
@@ -34,8 +38,11 @@ class RegisterViewModel: ViewModel(), OnRegistered {
         listener = null
     }
 
-    override fun onRegistered(success: Boolean) {
-        this.success = success
-        notifyRegistered()
+    override fun onRegisteredFailure() {
+        notifyRegisterFailure()
+    }
+
+    override fun onRegisteredSuccess() {
+        notifyRegisterSuccess()
     }
 }

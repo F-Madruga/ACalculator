@@ -4,4 +4,6 @@ interface OnDisplayChanged {
 
     fun onDisplayChanged(value: String?)
 
+    fun onAddOperation()
+
 }
