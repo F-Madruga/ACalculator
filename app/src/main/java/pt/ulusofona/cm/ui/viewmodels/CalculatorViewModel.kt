@@ -53,6 +53,7 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
     fun unregisterListener() {
         Log.i(TAG, "UnregisterListener")
         displayListener = null
+        historyListener = null
     }
 
     override fun onHistoryChanged(history: List<Operation>) {
