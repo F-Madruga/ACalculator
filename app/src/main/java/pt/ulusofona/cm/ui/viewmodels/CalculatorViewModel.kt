@@ -27,15 +27,15 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     private fun notifyOnDisplayChanged() {
         Log.i(TAG, "NotifyOnDisplayChanged")
-        listener?.onDisplayChanged(display)
+        CoroutineScope(Dispatchers.Main).launch {
+            listener?.onDisplayChanged(display)
+        }
     }
 
     override fun onDisplayChanged(value: String?) {
         Log.i(TAG, "OnDisplayChanged")
         this.display = value?:""
-        CoroutineScope(Dispatchers.Main).launch {
-            notifyOnDisplayChanged()
-        }
+        notifyOnDisplayChanged()
     }
 
     override fun onAddOperation() {
@@ -56,9 +56,9 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
         listener = null
     }
 
-    fun onClickEquals() {
+    fun onClickEquals(token: String) {
         Log.i(TAG, "OnClickEquals")
-        calculatorLogic.performOperation(display, this)
+        calculatorLogic.performOperation(display, this, token)
     }
 
     fun onClickSymbol(symbol: String) {

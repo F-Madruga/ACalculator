@@ -67,6 +67,8 @@ class LoginFragment : Fragment(), OnAuthenticated {
     }
 
     override fun onAuthenticateSuccess(email: String, token: String) {
+        Log.i(TAG, "EMAIL - $email")
+        Log.i(TAG, "TOKEN - $token")
         activity?.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)?.edit()
             ?.putString("email", email)
             ?.putString("token", token)

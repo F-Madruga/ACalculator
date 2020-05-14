@@ -40,7 +40,7 @@ class CalculatorFragment : Fragment(), OnDisplayChanged, OnHistoryChanged {
     override fun onStart() {
         Log.i(TAG, "OnStart")
         calculatorViewModel.registerListener(this)
-        historyViewModel.registerListener(this)
+        historyViewModel.registerListener(this, activity?.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)?.getString("token", "")?: "")
         super.onStart()
     }
 
@@ -52,7 +52,7 @@ class CalculatorFragment : Fragment(), OnDisplayChanged, OnHistoryChanged {
     }
 
     override fun onAddOperation() {
-        historyViewModel.getAll()
+        historyViewModel.getAll(activity?.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)?.getString("token", "")?: "")
     }
 
     override fun onDisplayChanged(value: String?) {
@@ -72,7 +72,7 @@ class CalculatorFragment : Fragment(), OnDisplayChanged, OnHistoryChanged {
     @OnClick(R.id.button_equals)
     fun onClickEquals(view: View) {
         Log.i(TAG, "OnClickEquals")
-        calculatorViewModel.onClickEquals()
+        calculatorViewModel.onClickEquals(activity?.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)?.getString("token", "")?: "")
     }
 
     @Optional

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.ButterKnife
+import butterknife.OnClick
 import kotlinx.android.synthetic.main.fragment_history.*
 import pt.ulusofona.cm.R
 import pt.ulusofona.cm.data.local.entities.Operation
@@ -34,7 +35,7 @@ class HistoryFragment : Fragment(), OnHistoryChanged {
 
     override fun onStart() {
         Log.i(TAG, "OnStart")
-        historyViewModel.registerListener(this)
+        historyViewModel.registerListener(this, activity?.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)?.getString("token", "")?: "")
         super.onStart()
     }
 
@@ -50,6 +51,11 @@ class HistoryFragment : Fragment(), OnHistoryChanged {
             list_history?.layoutManager = LinearLayoutManager(activity as Context)
             list_history?.adapter = HistoryAdapter(activity as Context, R.layout.item_expression, it)
         }
+    }
+
+    @OnClick(R.id.button_clear_history)
+    fun onClickClearHistory(view: View) {
+        historyViewModel.onDeleteAll(activity?.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)?.getString("token", "")?:"")
     }
 
 }

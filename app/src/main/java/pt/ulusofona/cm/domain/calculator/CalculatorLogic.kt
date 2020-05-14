@@ -7,6 +7,8 @@ import kotlinx.coroutines.launch
 import net.objecthunter.exp4j.ExpressionBuilder
 import pt.ulusofona.cm.data.local.entities.Operation
 import pt.ulusofona.cm.data.local.room.dao.OperationDao
+import pt.ulusofona.cm.data.remote.requests.AddOperation
+import pt.ulusofona.cm.data.remote.services.OperationService
 import pt.ulusofona.cm.ui.listeners.OnDisplayChanged
 import pt.ulusofona.cm.ui.listeners.OnHistoryChanged
 import retrofit2.Retrofit
@@ -30,14 +32,18 @@ class CalculatorLogic(private val storage: OperationDao, private val retrofit: R
         listener.onDisplayChanged(if(display.length == 1) "0" else display.dropLast(1))
     }
 
-    fun performOperation(expression: String, listener: OnDisplayChanged) {
+    fun performOperation(expression: String, listener: OnDisplayChanged, token: String) {
         Log.i(TAG, "PerformOperation")
         val expressionBuilder = ExpressionBuilder(expression).build()
         val result = expressionBuilder.evaluate()
+        val service = retrofit.create(OperationService::class.java)
         CoroutineScope(Dispatchers.IO).launch {
-            storage.insert(Operation(expression, result))
-            Log.i(TAG, "Done inserting")
-            listener.onAddOperation()
+            val operation = Operation(expression, result)
+            storage.insert(operation)
+            val response = service.addOperation(token, AddOperation(operation.uuid, operation.expression, operation.result))
+            if (response.isSuccessful) {
+                listener.onAddOperation()
+            }
         }
         listener.onDisplayChanged(result.toString())
     }

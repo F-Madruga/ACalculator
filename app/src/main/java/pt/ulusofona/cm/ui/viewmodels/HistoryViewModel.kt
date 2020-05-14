@@ -37,10 +37,10 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun registerListener(listener: OnHistoryChanged?) {
+    fun registerListener(listener: OnHistoryChanged?, token: String) {
         Log.i(TAG, "RegisterListener")
         this.listener = listener
-        historyLogic.getAll(this)
+        historyLogic.getAll(this, token)
     }
 
     fun unregisterListener() {
@@ -48,8 +48,12 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
         listener = null
     }
 
-    fun getAll() {
-        historyLogic.getAll(this)
+    fun getAll(token: String) {
+        historyLogic.getAll(this, token)
         Log.i(TAG, "Done Get List")
+    }
+
+    fun onDeleteAll(token: String) {
+        historyLogic.deleteAll(this, token)
     }
 }
