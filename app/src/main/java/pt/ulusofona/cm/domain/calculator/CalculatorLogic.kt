@@ -37,9 +37,11 @@ class CalculatorLogic(private val storage: OperationDao, private val retrofit: R
         val expressionBuilder = ExpressionBuilder(expression).build()
         val result = expressionBuilder.evaluate()
         val service = retrofit.create(OperationService::class.java)
+        val operation = Operation(expression, result)
+        Log.i(TAG, operation.toString())
         CoroutineScope(Dispatchers.IO).launch {
-            val operation = Operation(expression, result)
             storage.insert(operation)
+            Log.i(TAG, "In thread ${operation.toString()}")
             val response = service.addOperation(token, AddOperation(operation.uuid, operation.expression, operation.result))
             if (response.isSuccessful) {
                 listener.onAddOperation()
