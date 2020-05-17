@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import pt.ulusofona.cm.data.local.entities.Operation
 import pt.ulusofona.cm.data.local.room.CalculatorDatabase
 import pt.ulusofona.cm.data.remote.RetrofitBuilder
+import pt.ulusofona.cm.data.repositories.OperationRepository
 import pt.ulusofona.cm.domain.calculator.HistoryLogic
 import pt.ulusofona.cm.ui.listeners.OnHistoryChanged
 
@@ -18,8 +19,12 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
 
     private var listener: OnHistoryChanged? = null
 
-    private val storage = CalculatorDatabase.getInstance(application).operationDao()
-    private val historyLogic = HistoryLogic(storage, RetrofitBuilder.getInstance(ENDPOINT))
+    private val repository: OperationRepository = OperationRepository(
+        CalculatorDatabase.getInstance(application).operationDao(),
+        RetrofitBuilder.getInstance(ENDPOINT)
+    )
+
+    private val historyLogic = HistoryLogic(repository)
 
     var history: List<Operation> = listOf()
 

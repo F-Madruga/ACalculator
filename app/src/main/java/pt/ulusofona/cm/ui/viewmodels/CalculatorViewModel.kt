@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import pt.ulusofona.cm.data.local.entities.Operation
 import pt.ulusofona.cm.data.local.room.CalculatorDatabase
 import pt.ulusofona.cm.data.remote.RetrofitBuilder
+import pt.ulusofona.cm.data.repositories.OperationRepository
 import pt.ulusofona.cm.domain.calculator.CalculatorLogic
 import pt.ulusofona.cm.ui.listeners.OnDisplayChanged
 import pt.ulusofona.cm.ui.listeners.OnHistoryChanged
@@ -20,8 +21,8 @@ class CalculatorViewModel(application: Application) : AndroidViewModel(applicati
 
     private var listener: OnDisplayChanged? = null
 
-    private val storage = CalculatorDatabase.getInstance(application).operationDao()
-    private val calculatorLogic = CalculatorLogic(storage, RetrofitBuilder.getInstance(ENDPOINT))
+    private val repository: OperationRepository = OperationRepository(CalculatorDatabase.getInstance(application).operationDao(), RetrofitBuilder.getInstance(ENDPOINT))
+    private val calculatorLogic = CalculatorLogic(repository)
 
     var display: String = ""
 
