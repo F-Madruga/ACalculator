@@ -1,3 +1,3 @@
-# ACalculator
+# Calculator
 
 First android project
